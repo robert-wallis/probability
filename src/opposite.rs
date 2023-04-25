@@ -1,3 +1,4 @@
+use crate::{app_state::AppState, predictor::Predictor};
 
 pub struct Prediction {
     prediction: bool,
@@ -7,11 +8,12 @@ impl Prediction {
     pub fn new() -> Prediction {
         Prediction { prediction: true }
     }
+}
 
-    pub fn predict(&mut self, result: bool) -> bool {
+impl Predictor for Prediction {
+    fn predict(&mut self, state: &AppState) -> bool {
         let guess = self.prediction;
-        self.prediction = !result;
+        self.prediction = !state.current_result;
         guess
     }
 }
-
