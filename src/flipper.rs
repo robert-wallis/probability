@@ -1,4 +1,8 @@
-use crate::{app_state::AppState, predictor::Predictor};
+use crate::{
+    app_state::AppState,
+    bookie::{Bet, Better, Bookie},
+    predictor::Predictor,
+};
 use std::fmt;
 
 pub struct Prediction {
@@ -15,6 +19,15 @@ impl Predictor for Prediction {
     fn predict(&mut self, _: &AppState) -> bool {
         self.prediction = !self.prediction;
         self.prediction
+    }
+}
+
+impl Better for Prediction {
+    fn bet(&mut self, bookie: &mut Bookie, _state: &AppState) {
+        bookie.bet(&Bet {
+            wager: 1,
+            on: self.prediction,
+        });
     }
 }
 

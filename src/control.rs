@@ -1,23 +1,39 @@
 use rand::prelude::*;
 use std::fmt;
 
-use crate::{app_state::AppState, predictor::Predictor};
+use crate::{
+    app_state::AppState,
+    bookie::{Bet, Better, Bookie},
+    predictor::Predictor,
+};
 
 pub struct Prediction {
     rng: ThreadRng,
+    guess: bool,
 }
 
 impl Prediction {
     pub fn new() -> Prediction {
         Prediction {
             rng: rand::thread_rng(),
+            guess: false,
         }
     }
 }
 
 impl Predictor for Prediction {
     fn predict(&mut self, _: &AppState) -> bool {
-        self.rng.gen_bool(0.5)
+        self.guess = self.rng.gen_bool(0.5);
+        self.guess
+    }
+}
+
+impl Better for Prediction {
+    fn bet(&mut self, bookie: &mut Bookie, _state: &AppState) {
+        bookie.bet(&Bet {
+            wager: 1,
+            on: self.guess,
+        });
     }
 }
 
