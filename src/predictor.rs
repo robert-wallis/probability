@@ -1,5 +1,6 @@
 use crate::app_state::AppState;
+use std::fmt;
 
-pub trait Predictor {
-	fn predict(&mut self, _: &AppState) -> bool;
+pub trait Predictor: fmt::Display {
+    fn predict(&mut self, _: &AppState) -> bool;
 }
