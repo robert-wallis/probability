@@ -23,19 +23,19 @@ fn main() {
     let mut runners = [
         Runner {
             predictor: Box::new(control::Prediction::new()),
-            stats: Stats(0),
+            stats: Stats::new(),
         },
         Runner {
             predictor: Box::new(flipper::Prediction::new()),
-            stats: Stats(0),
+            stats: Stats::new(),
         },
         Runner {
             predictor: Box::new(opposite::Prediction::new()),
-            stats: Stats(0),
+            stats: Stats::new(),
         },
         Runner {
             predictor: Box::new(money::Prediction::new(state.total_count)),
-            stats: Stats(0),
+            stats: Stats::new(),
         },
     ];
 
@@ -44,7 +44,7 @@ fn main() {
 
         for runner in &mut runners {
             if runner.predictor.predict(&state) == result {
-                runner.stats.0 += 1;
+                runner.stats.correct += 1;
             }
         }
 
@@ -57,7 +57,7 @@ fn main() {
         println!(
             "{}: {}",
             runner.predictor,
-            runner.stats.score(state.total_count)
+            runner.stats.accuracy(state.total_count)
         );
     }
 }

@@ -1,7 +1,12 @@
-pub struct Stats(pub i32);
+pub struct Stats {
+    pub correct: u32,
+}
 
 impl Stats {
-    pub fn score(&self, total_tries: u32) -> f32 {
-        self.0 as f32 / total_tries as f32
+    pub fn new() -> Stats {
+        Stats { correct: 0 }
+    }
+    pub fn accuracy(&self, total_tries: u32) -> f32 {
+        self.correct as f32 / total_tries as f32
     }
 }
