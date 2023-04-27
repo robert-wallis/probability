@@ -1,9 +1,8 @@
 use std::fmt;
 
-use crate::{app_state::AppState, predictor::Predictor, stats::Stats};
+use crate::{app_state::AppState, predictor::Predictor};
 
 pub struct Prediction {
-    stats: Stats,
     money: u32,
     wager: u32,
     wager_prediction: bool,
@@ -12,7 +11,6 @@ pub struct Prediction {
 impl Prediction {
     pub fn new(money: u32) -> Prediction {
         Prediction {
-            stats: Stats::new(),
             money,
             wager: 0,
             wager_prediction: false,
@@ -51,13 +49,6 @@ impl Predictor for Prediction {
         let guess = !state.current_result; // always guess the opposite
         self.wager_prediction = guess;
         guess
-    }
-
-    fn accuracy(&self, total_tries: u32) -> f32 {
-        self.stats.accuracy(total_tries)
-    }
-    fn update_stats(&mut self, correct: bool) {
-        self.stats.correct += if correct { 1 } else { 0 }
     }
 }
 
