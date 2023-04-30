@@ -10,10 +10,21 @@ mod stats;
 
 use crate::{bookie::Bookie, predictor::Predictor, stats::Stats};
 
+macro_rules! runner {
+    ( $predictor:expr, $total:expr ) => {
+        Runner {
+            predictor: Box::new($predictor),
+            stats: Stats::default(),
+            bookie: Bookie::new($total),
+        }
+    };
+}
+
 fn main() {
     let mut rng: ThreadRng = rand::thread_rng();
 
-    let mut state = app_state::AppState::new(1_000_000);
+    let total_count: u32 = 1_000_000;
+    let mut state = app_state::AppState::new(total_count);
 
     struct Runner {
         predictor: Box<dyn Predictor>,
@@ -22,26 +33,10 @@ fn main() {
     }
 
     let mut runners: Vec<Runner> = vec![
-        Runner {
-            predictor: Box::new(control::Prediction::new()),
-            stats: Stats::default(),
-            bookie: Bookie::new(state.total_count),
-        },
-        Runner {
-            predictor: Box::new(flipper::Prediction::new()),
-            stats: Stats::default(),
-            bookie: Bookie::new(state.total_count),
-        },
-        Runner {
-            predictor: Box::new(opposite::Prediction::new()),
-            stats: Stats::default(),
-            bookie: Bookie::new(state.total_count),
-        },
-        Runner {
-            predictor: Box::new(money::Prediction::new()),
-            stats: Stats::default(),
-            bookie: Bookie::new(state.total_count),
-        },
+        runner!(control::Prediction::new(), total_count),
+        runner!(flipper::Prediction::new(), total_count),
+        runner!(opposite::Prediction::new(), total_count),
+        runner!(money::Prediction::new(), total_count),
     ];
 
     for _ in 0..state.total_count {
