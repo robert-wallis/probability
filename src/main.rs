@@ -1,16 +1,13 @@
 use rand::prelude::*;
 mod app_state;
 pub mod bookie;
-mod control;
-mod flipper;
-mod money;
-mod opposite;
 mod predictor;
 #[macro_use]
 mod runner;
+mod predictors;
 mod stats;
 
-use crate::{bookie::Bookie, runner::Runner, stats::Stats};
+use crate::{bookie::Bookie, predictors::*, runner::Runner, stats::Stats};
 
 fn main() {
     let mut rng: ThreadRng = rand::thread_rng();
