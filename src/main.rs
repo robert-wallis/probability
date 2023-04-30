@@ -6,31 +6,17 @@ mod flipper;
 mod money;
 mod opposite;
 mod predictor;
+#[macro_use]
+mod runner;
 mod stats;
 
-use crate::{bookie::Bookie, predictor::Predictor, stats::Stats};
-
-macro_rules! runner {
-    ( $predictor:expr, $total:expr ) => {
-        Runner {
-            predictor: Box::new($predictor),
-            stats: Stats::default(),
-            bookie: Bookie::new($total),
-        }
-    };
-}
+use crate::{bookie::Bookie, runner::Runner, stats::Stats};
 
 fn main() {
     let mut rng: ThreadRng = rand::thread_rng();
 
     let total_count: u32 = 1_000_000;
     let mut state = app_state::AppState::new(total_count);
-
-    struct Runner {
-        predictor: Box<dyn Predictor>,
-        stats: Stats,
-        bookie: Bookie,
-    }
 
     let mut runners: Vec<Runner> = vec![
         runner!(control::Prediction::new(), total_count),
