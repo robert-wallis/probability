@@ -3,11 +3,11 @@ use std::fmt;
 use crate::bookie::Bookie;
 
 #[derive(Clone, Default)]
-pub struct Stats {
+pub struct RunningStats {
     correct: u32,
 }
 
-impl Stats {
+impl RunningStats {
     pub fn accuracy(&self, total_tries: u32) -> f32 {
         self.correct as f32 / total_tries as f32
     }
@@ -23,7 +23,7 @@ pub struct FinalStats {
 
 impl FinalStats {
     pub fn new(
-        stats: &Stats,
+        stats: &RunningStats,
         bookie: &Bookie,
         expected_money: u32,
         total_tries: u32,

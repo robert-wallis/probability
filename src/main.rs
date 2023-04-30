@@ -11,7 +11,7 @@ use crate::{
     bookie::Bookie,
     predictors::*,
     runner::Runner,
-    stats::{FinalStats, Stats},
+    stats::{FinalStats, RunningStats},
 };
 
 fn main() {
