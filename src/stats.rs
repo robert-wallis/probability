@@ -39,7 +39,7 @@ impl fmt::Display for FinalStats {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "accuracy:{:<9}, ${:<9}: {:<9}",
+            "accuracy:{:>9}, ${:>9}: {:>9}",
             self.accuracy,
             self.money_difference,
             self.money_difference - (self.accuracy * 2_000_000.0 - 1_000_000.0) as i32

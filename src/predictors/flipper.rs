@@ -33,6 +33,6 @@ impl Better for Prediction {
 
 impl fmt::Display for Prediction {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Flipper")
+        write!(f, "Flipper ")
     }
 }
