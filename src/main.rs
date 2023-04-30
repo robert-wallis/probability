@@ -7,7 +7,12 @@ mod runner;
 mod predictors;
 mod stats;
 
-use crate::{bookie::Bookie, predictors::*, runner::Runner, stats::Stats};
+use crate::{
+    bookie::Bookie,
+    predictors::*,
+    runner::Runner,
+    stats::{FinalStats, Stats},
+};
 
 fn main() {
     let mut rng: ThreadRng = rand::thread_rng();
@@ -42,10 +47,14 @@ fn main() {
 
     for runner in &runners {
         println!(
-            "{}: {}, {}",
+            "-{:10} {:<30}",
             runner.predictor,
-            runner.stats.accuracy(state.total_count),
-            runner.bookie,
+            FinalStats::new(
+                &runner.stats,
+                &runner.bookie,
+                state.total_count,
+                state.total_count
+            ),
         );
     }
 }
