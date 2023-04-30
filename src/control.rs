@@ -3,7 +3,7 @@ use std::fmt;
 
 use crate::{
     app_state::AppState,
-    bookie::{Bet, Better, Bookie},
+    bookie::{Bet, Better},
     predictor::Predictor,
 };
 
@@ -29,11 +29,11 @@ impl Predictor for Prediction {
 }
 
 impl Better for Prediction {
-    fn bet(&mut self, bookie: &mut Bookie, _state: &AppState) {
-        bookie.bet(&Bet {
+    fn bet(&mut self, _state: &AppState) -> Option<Bet> {
+        Some(Bet {
             wager: 1,
             on: self.guess,
-        });
+        })
     }
 }
 

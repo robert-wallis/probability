@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::{
     app_state::AppState,
-    bookie::{Bet, Better, Bookie},
+    bookie::{Bet, Better},
     predictor::Predictor,
 };
 
@@ -24,21 +24,15 @@ impl Predictor for Prediction {
 }
 
 impl Better for Prediction {
-    fn bet(&mut self, bookie: &mut Bookie, state: &AppState) {
-        let money = bookie.get_balance();
-        if state.current_run <= 1 || money == 0 {
-            return;
+    fn bet(&mut self, state: &AppState) -> Option<Bet> {
+        if state.current_run <= 1 {
+            return None;
         }
         let gut_bet = 2 ^ (state.current_run - 1);
-        let wager = if gut_bet <= money {
-            gut_bet
-        } else {
-            money // all in
-        };
-        bookie.bet(&Bet {
-            wager,
+        Some(Bet {
+            wager: gut_bet,
             on: self.guess,
-        });
+        })
     }
 }
 

@@ -56,5 +56,5 @@ impl fmt::Display for Bookie {
 }
 
 pub trait Better {
-    fn bet(&mut self, bookie: &mut Bookie, state: &AppState);
+    fn bet(&mut self, state: &AppState) -> Option<Bet>;
 }

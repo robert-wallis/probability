@@ -44,8 +44,11 @@ fn main() {
 
         for runner in &mut runners {
             let prediction = runner.predictor.predict(&state);
-            runner.predictor.bet(&mut runner.bookie, &state);
-            runner.bookie.result(throw);
+            let bet = runner.predictor.bet(&state);
+            if let Some(bet) = bet {
+                runner.bookie.bet(&bet);
+                runner.bookie.result(throw);
+            }
             runner.stats.update(prediction == throw);
         }
 
