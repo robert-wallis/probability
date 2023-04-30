@@ -47,8 +47,8 @@ fn main() {
 
     for runner in &runners {
         println!(
-            "-{:10} {:<30}",
-            runner.predictor,
+            "* {:10} {:<30}",
+            runner.predictor.to_string(),
             FinalStats::new(
                 &runner.stats,
                 &runner.bookie,
