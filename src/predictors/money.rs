@@ -1,8 +1,8 @@
 use std::fmt;
 
 use crate::{
-    app_state::AppState,
     account::{Bet, Better},
+    app_state::AppState,
     predictor::Predictor,
 };
 
@@ -28,9 +28,9 @@ impl Better for Prediction {
         if state.current_run <= 1 {
             return None;
         }
-        let gut_bet = 2 ^ (state.current_run - 1);
+        let wager = 2 * state.current_run;
         Some(Bet {
-            wager: gut_bet,
+            wager,
             on: self.guess,
         })
     }

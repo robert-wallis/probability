@@ -1,6 +1,6 @@
 use crate::{
-    app_state::AppState,
     account::{Bet, Better},
+    app_state::AppState,
     predictor::Predictor,
 };
 use std::fmt;
@@ -21,8 +21,10 @@ impl Predictor for Prediction {
 
 impl Better for Prediction {
     fn bet(&mut self, state: &AppState) -> Option<Bet> {
+        let double_down = matches!(state.current_id % 4, 0 | 1); // double, double, single, single
+        let wager = if double_down { 2 } else { 1 };
         Some(Bet {
-            wager: 1,
+            wager,
             on: !state.current_result,
         })
     }

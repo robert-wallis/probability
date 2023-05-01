@@ -2,8 +2,8 @@ use rand::prelude::*;
 use std::fmt;
 
 use crate::{
-    app_state::AppState,
     account::{Bet, Better},
+    app_state::AppState,
     predictor::Predictor,
 };
 
@@ -30,8 +30,11 @@ impl Predictor for Prediction {
 
 impl Better for Prediction {
     fn bet(&mut self, _state: &AppState) -> Option<Bet> {
+        // about 50% of the time it will be the same roll as last time, so double down 50% of the
+        // time
+        let double_down = self.rng.gen_bool(0.5);
         Some(Bet {
-            wager: 1,
+            wager: if double_down { 2 } else { 1 },
             on: self.guess,
         })
     }

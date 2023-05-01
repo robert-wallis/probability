@@ -1,4 +1,4 @@
-use crate::{app_state::AppState, account::Better};
+use crate::{account::Better, app_state::AppState};
 use std::fmt;
 
 pub trait Predictor: fmt::Display + Better {

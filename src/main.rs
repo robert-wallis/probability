@@ -1,6 +1,6 @@
 use rand::prelude::*;
-mod app_state;
 pub mod account;
+mod app_state;
 mod predictor;
 #[macro_use]
 mod runner;
@@ -42,18 +42,13 @@ fn main() {
 
         state = state.next(throw);
     }
-    println!("total runs: {}", state.total_count);
-    println!("longest run: {}", state.longest_run);
+    println!("{}", state);
 
     for runner in &runners {
         println!(
-            "* {:10} {:<30}",
+            "* {:10} {}",
             runner.predictor.to_string(),
-            FinalStats::new(
-                &runner.stats,
-                &runner.account,
-                state.total_count,
-            ),
+            FinalStats::new(&runner.stats, &runner.account, state.total_count,),
         );
     }
 }
