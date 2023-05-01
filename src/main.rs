@@ -53,7 +53,6 @@ fn main() {
                 &runner.stats,
                 &runner.account,
                 state.total_count,
-                state.total_count
             ),
         );
     }
