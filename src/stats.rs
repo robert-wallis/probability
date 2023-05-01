@@ -21,14 +21,16 @@ impl RunningStats {
 }
 
 pub struct FinalStats {
-    money_difference: i32,
-    accuracy: f32,
+    pub money_difference: i32,
+    pub expected_money: u32,
+    pub accuracy: f32,
 }
 
 impl FinalStats {
     pub fn new(stats: &RunningStats, account: &Account, expected_money: u32) -> FinalStats {
         FinalStats {
             money_difference: account.get_balance() as i32 - expected_money as i32,
+            expected_money,
             accuracy: stats.accuracy(),
         }
     }
@@ -41,7 +43,9 @@ impl fmt::Display for FinalStats {
             "accuracy:{:<9}, ${:>9}: {:>9}",
             self.accuracy,
             self.money_difference,
-            self.money_difference - (self.accuracy * 2_000_000.0 - 1_000_000.0) as i32
+            self.money_difference
+                - (self.accuracy * 2.0 * self.expected_money as f32 - self.expected_money as f32)
+                    as i32
         )
     }
 }

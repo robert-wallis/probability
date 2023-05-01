@@ -1,34 +1,37 @@
-# Probability
+# Probability - Gamblers Fallacy
 Testing out intuition about the Law of Large Numbers versus the Gamblers Fallacy.
 
 # Results
-```
-total runs: 1000000
-longest run: 19
-Control: 0.500046, money: 1000092
-Flipper: 0.499792, money: 999584
-Opposite: 0.499609, money: 999218
-Money: 0.499609, money: 1000409
 
-total runs: 1000000
-longest run: 20
-Control: 0.499658, money: 999316
-Flipper: 0.500396, money: 1000792
-Opposite: 0.499589, money: 999178
-Money: 0.499589, money: 1000543
+10,000 times executed 10,000 coin flips.  100,000,000 flips total.
 
-total runs: 1000000
-longest run: 18
-Control: 0.500814, money: 1001628
-Flipper: 0.5002, money: 1000400
-Opposite: 0.499482, money: 998964
-Money: 0.499482, money: 996945
-```
+| Kind | AVERAGE of accuracy | SUM of money | AVERAGE of money |
+| --- | --- | --- | --- |
+| Opposite	| 0.50000831	| 6400	| 0.64 |
+| Control	| 0.50003331	| 7520	| 0.752 |
+| Flipper	| 0.50001001	| 8078	| 0.8078 |
+| Money	| 0.50000831	| 8698	| 0.8698 |
+| Grand Total	| 0.500014985	| 30696	| 0.7674 |
 
-Guessing randomly (control) performs equal to mechanically guessing true/false (flipper) and guessing the opposite of the last answer.
+The average accuracy is always around 0.5, in essense The Gambler's Fallacy.
 
-The accuracy is about the same for all predictors.  But "Money" seems to be making more money than the others which bet 1 every time, just not all the time as seen in result 3.
+* **Control** - either bets 2 or 1 randomly, and guesses heads or tails randomly.
+* **Flipper** - guesses heads then tails, bets in sequence [2, 2, 1, 1] then repeat.
+* **Opposite** - always guesses the opposite of last run, bets [2, 2, 1, 1]
+* **Money** - always guesses the opposite, bets 2 * length of run, so if the run is 20 heads in a row it will bet 40 on tails
 
-I think the reason for this is that yes in a single variable situation, the probability is still 0.5 for a fair coin, however there is another variable money, and the probability it will switch with Large Numbers is higher as the run increases.
+The amount of money won is slightly higher for Money, but not significantly more than flipper which mechanically bets an even amount according to a pattern.
 
-Still need to do more tests.
+I think this shows merely that higher risk gives higer reward.
+
+# Future Work
+
+Calculate the probability of each run length, and make betters that bet randomly according to the distribution of that p over the total lifetime of the game.
+
+For example:
+* 50% of the time bet 1
+* 25% of the time bet 2
+* 12.5% of the time bet 4
+* 6.25% of the time bet 8
+
+Then have money use 2^run_length to calculate it's bet.  Both should be betting the same amount the same number of times, but one has a strategy based on previous flips, and the other is random or mechanical.
