@@ -3,7 +3,7 @@ use std::fmt;
 use crate::app_state::AppState;
 
 #[derive(Default)]
-pub struct Bookie {
+pub struct Account {
     money: u32,
     bet: Bet,
 }
@@ -14,9 +14,9 @@ pub struct Bet {
     pub on: bool,
 }
 
-impl Bookie {
-    pub fn new(balance: u32) -> Bookie {
-        Bookie {
+impl Account {
+    pub fn new(balance: u32) -> Account {
+        Account {
             money: balance,
             bet: Bet::default(),
         }
@@ -49,7 +49,7 @@ impl Bookie {
     }
 }
 
-impl fmt::Display for Bookie {
+impl fmt::Display for Account {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "money: {}", self.money)
     }

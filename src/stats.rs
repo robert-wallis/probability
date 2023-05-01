@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::bookie::Bookie;
+use crate::account::Account;
 
 #[derive(Clone, Default)]
 pub struct RunningStats {
@@ -24,12 +24,12 @@ pub struct FinalStats {
 impl FinalStats {
     pub fn new(
         stats: &RunningStats,
-        bookie: &Bookie,
+        account: &Account,
         expected_money: u32,
         total_tries: u32,
     ) -> FinalStats {
         FinalStats {
-            money_difference: bookie.get_balance() as i32 - expected_money as i32,
+            money_difference: account.get_balance() as i32 - expected_money as i32,
             accuracy: stats.accuracy(total_tries),
         }
     }

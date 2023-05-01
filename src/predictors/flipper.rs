@@ -1,6 +1,6 @@
 use crate::{
     app_state::AppState,
-    bookie::{Bet, Better},
+    account::{Bet, Better},
     predictor::Predictor,
 };
 use std::fmt;

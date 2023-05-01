@@ -1,6 +1,6 @@
 use rand::prelude::*;
 mod app_state;
-pub mod bookie;
+pub mod account;
 mod predictor;
 #[macro_use]
 mod runner;
@@ -8,7 +8,7 @@ mod predictors;
 mod stats;
 
 use crate::{
-    bookie::Bookie,
+    account::Account,
     predictors::*,
     runner::Runner,
     stats::{FinalStats, RunningStats},
@@ -34,8 +34,8 @@ fn main() {
             let prediction = runner.predictor.predict(&state);
             let bet = runner.predictor.bet(&state);
             if let Some(bet) = bet {
-                runner.bookie.bet(&bet);
-                runner.bookie.result(throw);
+                runner.account.bet(&bet);
+                runner.account.result(throw);
             }
             runner.stats.update(prediction == throw);
         }
@@ -51,7 +51,7 @@ fn main() {
             runner.predictor.to_string(),
             FinalStats::new(
                 &runner.stats,
-                &runner.bookie,
+                &runner.account,
                 state.total_count,
                 state.total_count
             ),

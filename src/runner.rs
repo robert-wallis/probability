@@ -1,8 +1,8 @@
-use crate::{bookie::Bookie, predictor::Predictor, stats::RunningStats};
+use crate::{account::Account, predictor::Predictor, stats::RunningStats};
 pub struct Runner {
     pub predictor: Box<dyn Predictor>,
     pub stats: RunningStats,
-    pub bookie: Bookie,
+    pub account: Account,
 }
 
 #[macro_export]
@@ -11,7 +11,7 @@ macro_rules! runner {
         Runner {
             predictor: Box::new($predictor),
             stats: RunningStats::default(),
-            bookie: Bookie::new($total),
+            account: Account::new($total),
         }
     };
 }
