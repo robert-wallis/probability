@@ -28,7 +28,7 @@ fn main() {
 
 fn multi_csv(total_count: u32, total_app: u32) -> Result<(), Box<dyn Error>> {
     let mut csv_writer = csv::Writer::from_writer(io::stdout());
-    _ = csv_writer.write_record(&[&"Kind", &"accuracy", &"money"]);
+    _ = csv_writer.write_record([&"Kind", &"accuracy", &"money"]);
 
     for _ in 0..total_app {
         match app(total_count) {
