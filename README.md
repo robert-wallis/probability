@@ -1,6 +1,13 @@
 # Probability - Gamblers Fallacy
 Testing out intuition about the Law of Large Numbers versus the Gamblers Fallacy.
 
+# Usage
+
+```
+./probability stdout --total 100 --apps 100
+./probability csv --total 10000 --apps 10000 > results.csv
+```
+
 # Results
 
 10,000 times executed 10,000 coin flips.  100,000,000 flips total.

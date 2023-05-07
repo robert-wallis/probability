@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::account::Account;
+use crate::flipper::account::Account;
 
 #[derive(Clone, Default)]
 pub struct RunningStats {

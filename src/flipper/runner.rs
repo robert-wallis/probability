@@ -1,4 +1,4 @@
-use crate::{account::Account, predictor::Predictor, stats::RunningStats};
+use crate::flipper::{account::Account, predictor::Predictor, stats::RunningStats};
 pub struct Runner {
     pub predictor: Box<dyn Predictor>,
     pub stats: RunningStats,
@@ -10,8 +10,8 @@ macro_rules! runner {
     ( $predictor:expr, $total:expr ) => {
         Runner {
             predictor: Box::new($predictor),
-            stats: RunningStats::default(),
-            account: Account::new($total),
+            stats: $crate::flipper::stats::RunningStats::default(),
+            account: $crate::flipper::account::Account::new($total),
         }
     };
 }

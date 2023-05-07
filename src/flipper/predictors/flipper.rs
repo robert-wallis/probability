@@ -1,8 +1,4 @@
-use crate::{
-    account::{Bet, Better},
-    app_state::AppState,
-    predictor::Predictor,
-};
+use crate::flipper::{app_state::AppState, bet::Bet, better::Better, predictor::Predictor};
 use std::fmt;
 
 pub struct Prediction {
