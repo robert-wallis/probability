@@ -5,9 +5,9 @@ use std::fmt;
 pub struct AppState {
     pub last_result: bool,               // last roll
     pub current_result: bool,            // current roll
-    pub current_run: u32,                // curent streak of the same result
+    pub current_run: u32,                // current streak of the same result
     pub longest_run: u32,                // largest streak of the same result
-    pub run_lengths: BTreeMap<u32, u32>, // <length, times_occured>
+    pub run_lengths: BTreeMap<u32, u32>, // <length, times_occurred>
     pub count_result_in_a_run: u32,      // how many results were in runs
     pub total_count: u32,                // total number of rolls
     pub current_id: u32,                 // the current run index x of `total_count`

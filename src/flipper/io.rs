@@ -1,4 +1,4 @@
-use crate::flipper::{app_state::AppState, runner::Runner, stats::FinalStats};
+use super::{app_state::AppState, runner::Runner, stats::FinalStats};
 
 pub fn print(state: &AppState, runners: &Vec<Runner>) {
     println!("{}", state);

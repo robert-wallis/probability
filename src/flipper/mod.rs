@@ -6,8 +6,6 @@ pub mod io;
 mod predictor;
 #[macro_use]
 mod runner;
-mod bet;
-mod better;
 mod predictors;
 mod stats;
 

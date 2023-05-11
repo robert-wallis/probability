@@ -1,4 +1,4 @@
-use crate::flipper::{account::Account, predictor::Predictor, stats::RunningStats};
+use super::{account::Account, predictor::Predictor, stats::RunningStats};
 pub struct Runner {
     pub predictor: Box<dyn Predictor>,
     pub stats: RunningStats,

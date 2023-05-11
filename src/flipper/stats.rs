@@ -1,7 +1,6 @@
 use std::fmt;
 
-use crate::flipper::account::Account;
-use crate::flipper::account::Bank;
+use super::account::{Account, Bank};
 
 #[derive(Clone, Default)]
 pub struct RunningStats {

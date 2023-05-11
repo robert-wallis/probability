@@ -1,4 +1,4 @@
-use crate::flipper::{app::app, stats::FinalStats};
+use super::{app::app, stats::FinalStats};
 use std::{error::Error, io};
 
 pub fn multi_csv(total_count: u32, total_app: u32) -> Result<(), Box<dyn Error>> {

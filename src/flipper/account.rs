@@ -1,11 +1,17 @@
 use std::fmt;
 
-use crate::flipper::bet::Bet;
+use super::app_state::AppState;
 
 #[derive(Default)]
 pub struct Account {
     money: u32,
     bet: Bet,
+}
+
+#[derive(Default, Clone, Copy)]
+pub struct Bet {
+    pub wager: u32,
+    pub on: bool,
 }
 
 pub trait Bank {
@@ -17,6 +23,10 @@ pub trait Bank {
 pub trait Bookie {
     fn bet(&mut self, bet: &Bet);
     fn result(&mut self, winner: bool);
+}
+
+pub trait Better {
+    fn bet(&mut self, state: &AppState) -> Option<Bet>;
 }
 
 impl Account {
@@ -67,8 +77,6 @@ impl Bookie for Account {
         self.bet.wager = 0;
     }
 }
-
-
 
 impl fmt::Display for Account {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
