@@ -95,7 +95,7 @@ mod tests {
 
         a.bet(&Bet{wager:50, on: true});
         assert_eq!(50, a.bet.wager);
-        assert_eq!(true, a.bet.on);
+        assert!(a.bet.on);
 
         // no balance change yet
         assert_eq!(100, a.get_balance());
@@ -168,6 +168,6 @@ mod tests {
         let a = Account::default();
         assert_eq!(0, a.money);
         assert_eq!(0, a.bet.wager);
-        assert_eq!(false, a.bet.on);
+        assert!(!a.bet.on);
     }
 }
