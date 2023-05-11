@@ -1,7 +1,12 @@
-use rand::prelude::*;
 use std::fmt;
 
-use crate::flipper::{app_state::AppState, account::{Bet, Better}, predictor::Predictor};
+use rand::{Rng, rngs::ThreadRng};
+
+use crate::flipper::{
+    account::{Bet, Better},
+    app_state::AppState,
+    predictor::Predictor,
+};
 
 pub struct Prediction {
     rng: ThreadRng,

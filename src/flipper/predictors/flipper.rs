@@ -1,5 +1,10 @@
-use crate::flipper::{app_state::AppState, account::{Bet, Better}, predictor::Predictor};
 use std::fmt;
+
+use crate::flipper::{
+    account::{Bet, Better},
+    app_state::AppState,
+    predictor::Predictor,
+};
 
 pub struct Prediction {
     prediction: bool,

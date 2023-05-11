@@ -93,7 +93,10 @@ mod tests {
         let mut a = Account::new(100);
         assert_eq!(100, a.get_balance());
 
-        a.bet(&Bet{wager:50, on: true});
+        a.bet(&Bet {
+            wager: 50,
+            on: true,
+        });
         assert_eq!(50, a.bet.wager);
         assert!(a.bet.on);
 
@@ -114,12 +117,18 @@ mod tests {
         assert_eq!(150, a.get_balance());
 
         // loser
-        a.bet(&Bet{wager:50, on: true});
+        a.bet(&Bet {
+            wager: 50,
+            on: true,
+        });
         a.result(false);
         assert_eq!(100, a.get_balance());
 
         // over-bet
-        a.bet(&Bet{wager:200, on: true});
+        a.bet(&Bet {
+            wager: 200,
+            on: true,
+        });
         a.result(false);
         assert_eq!(0, a.get_balance());
     }
@@ -152,7 +161,6 @@ mod tests {
         a.withdraw(36);
         assert_eq!(1, a.get_balance());
     }
-
 
     #[test]
     fn display() {

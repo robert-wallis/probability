@@ -1,6 +1,10 @@
 use std::fmt;
 
-use crate::flipper::{app_state::AppState, account::{Bet, Better}, predictor::Predictor};
+use crate::flipper::{
+    account::{Bet, Better},
+    app_state::AppState,
+    predictor::Predictor,
+};
 
 pub struct Prediction {
     guess: bool,

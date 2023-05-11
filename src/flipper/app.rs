@@ -1,13 +1,15 @@
-use rand::prelude::*;
 use std::error::Error;
 
+use rand::prelude::*;
+
+use crate::runner;
+
 use super::{
+    account::Bookie,
     app_state::AppState,
     predictors::{control, flipper, money, opposite},
     runner::Runner,
-    account::Bookie,
 };
-use crate::runner;
 
 pub fn app(total_count: u32) -> Result<(AppState, Vec<Runner>), Box<dyn Error>> {
     let mut rng: ThreadRng = thread_rng();
