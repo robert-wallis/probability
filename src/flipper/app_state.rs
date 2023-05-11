@@ -62,3 +62,14 @@ impl fmt::Display for AppState {
         writeln!(f, "longest run: {}", self.longest_run)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn display() {
+        let a = AppState::new(1);
+        assert_eq!("total rolls: 1\ntotal runs: 0 (0%)\nlongest run: 0\n", a.to_string());
+    }
+}
