@@ -12,7 +12,7 @@ use crate::{
 };
 
 pub fn app(total_count: u32) -> Result<(AppState, Vec<Runner>), Box<dyn Error>> {
-    let mut rng: ThreadRng = rand::thread_rng();
+    let mut rng: ThreadRng = thread_rng();
     let mut state = AppState::new(total_count);
 
     let mut runners: Vec<Runner> = vec![
