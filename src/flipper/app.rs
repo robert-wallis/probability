@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use rand::prelude::*;
 
 use crate::runner;
@@ -11,7 +9,7 @@ use super::{
     runner::Runner,
 };
 
-pub fn app(total_count: u32) -> Result<(AppState, Vec<Runner>), Box<dyn Error>> {
+pub fn app(total_count: u32) -> (AppState, Vec<Runner>) {
     let mut rng: ThreadRng = thread_rng();
     let mut state = AppState::new(total_count);
 
@@ -38,5 +36,5 @@ pub fn app(total_count: u32) -> Result<(AppState, Vec<Runner>), Box<dyn Error>> 
         state = state.next(throw);
     }
 
-    Ok((state, runners))
+    (state, runners)
 }
