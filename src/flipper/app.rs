@@ -38,3 +38,19 @@ pub fn app(total_count: u32) -> (AppState, Vec<Runner>) {
 
     (state, runners)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn total_count_in_state() {
+        let count = 10;
+        let (state, runners) = app(count);
+        assert_eq!(
+            count, state.total_count,
+            "state count should be the same as passed into app"
+        );
+        assert_eq!(4, runners.len(), "there should be 4 runners");
+    }
+}
