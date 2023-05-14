@@ -42,15 +42,8 @@ fn main() {
         }
         Commands::Stdout { count, apps } => {
             for _ in 0..apps {
-                match flipper::app(count) {
-                    Err(e) => {
-                        println!("Error: {}", e);
-                        process::exit(1);
-                    }
-                    Ok((state, runners)) => {
-                        flipper::io::print(&state, &runners);
-                    }
-                }
+                let (state, runners) = flipper::app(count);
+                flipper::io::print(&state, &runners);
             }
         }
     }
