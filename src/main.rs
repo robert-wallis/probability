@@ -1,6 +1,7 @@
 mod flipper;
 
 use clap::{Parser, Subcommand};
+use std::io;
 use std::process;
 
 #[derive(Subcommand, Debug)]
@@ -35,8 +36,9 @@ fn main() {
 
     match args.command {
         Commands::Csv { count, apps } => {
-            if let Err(e) = flipper::multi_csv(count, apps) {
-                println!("Error: {}", e);
+            let mut stdout = io::stdout();
+            if let Err(e) = flipper::multi_csv(count, apps, &mut stdout) {
+                println!("CSV Error: {}", e);
                 process::exit(1);
             }
         }
