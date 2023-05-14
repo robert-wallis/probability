@@ -49,3 +49,67 @@ impl fmt::Display for FinalStats {
         )
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    mod running_stats {
+        use super::super::RunningStats;
+        #[test]
+        fn accuracy() {
+            // GIVEN 50% correct answers
+            let rs = RunningStats {
+                correct: 2,
+                wrong: 2,
+            };
+            // THEN accuracy is 50%
+            assert_eq!(2.0 / 4.0, rs.accuracy(), "accuracy of 1/2 correct");
+        }
+
+        #[test]
+        fn update() {
+            // GIVEN some boolean values for results
+            let results = [true, false, true, false, true];
+
+            // WHEN we update the running stats
+            let mut rs = RunningStats::default();
+            for correct in results {
+                rs.update(correct)
+            }
+
+            // THEN the running stats should be correct
+            let total_true = results.iter().filter(|&x| *x).count() as u32;
+            let total_false = results.iter().filter(|&x| !(*x)).count() as u32;
+
+            assert_eq!(total_true, rs.correct, "total number of correct answers");
+            assert_eq!(total_false, rs.wrong, "total number of correct answers");
+        }
+    }
+
+    mod final_stats {
+        use super::super::{FinalStats, RunningStats};
+        use crate::flipper::account::Account;
+
+        #[test]
+        fn display() {
+            // GIVEN a RunningStats and Account object
+            // AND an expected money value
+            let running_stats = RunningStats {
+                correct: 2,
+                wrong: 2,
+            };
+            let account = Account::new(100);
+            let expected_money = 104;
+
+            // WHEN the FinalStats object is created
+            let final_stats = FinalStats::new(&running_stats, &account, expected_money);
+
+            // THEN the display should be correct
+            assert_eq!(
+                "accuracy:0.5      , $       -4:        -4",
+                final_stats.to_string(),
+                "display of FinalStats"
+            );
+        }
+    }
+}
