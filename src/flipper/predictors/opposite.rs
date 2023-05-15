@@ -43,7 +43,7 @@ mod tests {
 
     #[test]
     fn chooses_the_opposite() {
-        // GIVEN the flipper predictor
+        // GIVEN the opposite predictor
         let mut p = Prediction::new();
         let mut app_state = AppState::new(0);
 
