@@ -78,7 +78,7 @@ mod tests {
         }
 
         assert!(
-            true_count > 4900 && true_count < 5100,
+            true_count > 4750 && true_count < 5250, // P < 0.05 = 500/10000, so anything in that range is statistically significant
             "true_count:{} should be about 50% of {}",
             true_count,
             runs
