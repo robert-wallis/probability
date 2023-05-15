@@ -1,6 +1,7 @@
 mod flipper;
 
 use clap::{Parser, Subcommand};
+use flipper::{runner::RunnerLoop, stats::FinalStats};
 use std::io;
 use std::process;
 
@@ -34,18 +35,35 @@ struct Args {
 fn main() {
     let args: Args = Args::parse();
 
-    match args.command {
+    let total_count;
+    let total_apps;
+
+    let mut stdout = io::stdout();
+    let mut command: Box<dyn RunnerLoop> = match args.command {
         Commands::Csv { count, apps } => {
-            let mut stdout = io::stdout();
-            if let Err(e) = flipper::multi_csv(count, apps, &mut stdout) {
-                println!("CSV Error: {}", e);
-                process::exit(1);
-            }
+            total_count = count;
+            total_apps = apps;
+            let csv = flipper::csv::Csv::new(&mut stdout);
+            Box::new(csv)
         }
         Commands::Stdout { count, apps } => {
-            for _ in 0..apps {
-                let (state, runners) = flipper::app(count);
-                flipper::io::print(&state, &runners);
+            total_count = count;
+            total_apps = apps;
+            let io = flipper::io::IO;
+            Box::new(io)
+        }
+    };
+
+    for _ in 0..total_apps {
+        let (state, runners) = flipper::app(total_count);
+
+        command.each_app(&state);
+        for runner in runners {
+            let final_stats = FinalStats::new(&runner.stats, &runner.account, state.total_count);
+
+            if let Err(e) = command.each_run(&state, &runner, &final_stats) {
+                println!("Error: {}", e);
+                process::exit(1);
             }
         }
     }

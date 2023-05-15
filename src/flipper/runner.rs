@@ -1,4 +1,9 @@
-use super::{account::Account, predictor::Predictor, stats::RunningStats};
+use super::{
+    account::Account,
+    app_state::AppState,
+    predictor::Predictor,
+    stats::{FinalStats, RunningStats},
+};
 pub struct Runner {
     pub predictor: Box<dyn Predictor>,
     pub stats: RunningStats,
@@ -14,4 +19,14 @@ macro_rules! runner {
             account: $crate::flipper::account::Account::new($total),
         }
     };
+}
+
+pub trait RunnerLoop {
+    fn each_app(&self, state: &AppState);
+    fn each_run(
+        &mut self,
+        state: &AppState,
+        runner: &Runner,
+        final_stats: &FinalStats,
+    ) -> Result<(), Box<dyn std::error::Error>>;
 }

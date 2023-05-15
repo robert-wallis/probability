@@ -1,53 +1,72 @@
-use super::{app::app, stats::FinalStats};
+use super::{
+    app_state::AppState,
+    runner::{Runner, RunnerLoop},
+    stats::FinalStats,
+};
 use std::{error::Error, io};
 
-pub fn multi_csv(
-    total_count: u32,
-    total_app: u32,
-    writer: &mut dyn io::Write,
-) -> Result<(), Box<dyn Error>> {
-    let mut csv_writer = csv::Writer::from_writer(writer);
-    _ = csv_writer.write_record([&"Kind", &"accuracy", &"money"]);
+pub struct Csv<'w> {
+    writer: csv::Writer<&'w mut dyn io::Write>,
+}
 
-    for _ in 0..total_app {
-        let (state, runners) = app(total_count);
-        for runner in runners {
-            let stats = FinalStats::new(&runner.stats, &runner.account, state.total_count);
-            csv_writer.write_record(&[
-                runner.predictor.to_string(),
-                format!("{}", stats.accuracy),
-                format!("{}", stats.money_difference),
-            ])?;
-        }
+impl<'w> Csv<'w> {
+    pub fn new(writer: &'w mut dyn io::Write) -> Self {
+        let mut writer = csv::Writer::from_writer(writer);
+        _ = writer.write_record([&"Kind", &"accuracy", &"money"]);
+        Self { writer }
     }
-    Ok(())
+
+    pub fn print(
+        &mut self,
+        runner: &Runner,
+        final_stats: &FinalStats,
+    ) -> Result<(), Box<dyn Error>> {
+        self.writer.write_record(&[
+            runner.predictor.to_string(),
+            format!("{}", final_stats.accuracy),
+            format!("{}", final_stats.money_difference),
+        ])?;
+        Ok(())
+    }
+}
+
+impl RunnerLoop for Csv<'_> {
+    fn each_app(&self, _state: &AppState) {}
+
+    fn each_run(
+        &mut self,
+        _state: &AppState,
+        runner: &Runner,
+        final_stats: &FinalStats,
+    ) -> Result<(), Box<dyn Error>> {
+        self.print(runner, final_stats)?;
+        Ok(())
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::multi_csv;
-    use std::io::{BufRead, BufWriter};
+    use super::Csv;
+    use std::io::BufWriter;
 
     #[test]
     fn runs_the_app_multiple_times() {
         // GIVEN multiple ocunts and multiple apps
-        let total_count = 2;
-        let total_app = 3;
         let mut buffer = BufWriter::new(vec![]);
-        // WHEN multi_csv is called
-        let result = multi_csv(total_count, total_app, &mut buffer);
+        // WHEN csv is called
+        _ = Csv::new(&mut buffer);
 
-        // THEN it should run without error
-        assert!(result.is_ok(), "multi_csv should run without error");
+        // get the string from the BufWriter
+        let string_of_buffer = String::from_utf8(
+            buffer
+                .into_inner()
+                .expect("should be able to get the buffer"),
+        )
+        .expect("should be able to get the string");
 
-        // AND it should write the correct number of lines
-        let number_of_predictors = 4;
-        let total_line_items = total_app * number_of_predictors;
-        let header_length = 1;
-        let total_lines = total_line_items + header_length;
+        // THEN it should write the header
         assert_eq!(
-            total_lines,
-            buffer.into_inner().unwrap().lines().count() as u32,
+            "Kind,accuracy,money\n", string_of_buffer,
             "total number of lines in the csv"
         );
     }
