@@ -23,8 +23,6 @@ impl<'w> Csv<'w> {
 }
 
 impl RunnerLoop for Csv<'_> {
-    fn each_app(&self, _state: &AppState) {}
-
     fn each_run(
         &mut self,
         name: &str,
@@ -67,7 +65,6 @@ mod tests {
             let mut csv = Csv::new(&mut buffer);
 
             // WHEN Csv::print is called
-            csv.each_app(&app_state);
             _ = csv.each_run(
                 "name",
                 &app_state,

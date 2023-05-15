@@ -11,4 +11,3 @@ pub mod stats;
 
 pub use self::app::app;
 pub use self::csv::Csv;
-pub use self::io::print;

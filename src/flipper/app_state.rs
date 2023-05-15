@@ -75,7 +75,7 @@ impl fmt::Display for AppState {
             self.count_result_in_a_run,
             self.count_result_in_a_run as f32 / self.total_count as f32
         )?;
-        writeln!(f, "longest run: {}", self.longest_run)
+        write!(f, "longest run: {}", self.longest_run)
     }
 }
 
@@ -194,7 +194,7 @@ mod tests {
     fn display() {
         let a = AppState::new(1);
         assert_eq!(
-            "total rolls: 1\ntotal runs: 0 (0%)\nlongest run: 0\n",
+            "total rolls: 1\ntotal runs: 0 (0%)\nlongest run: 0",
             a.to_string()
         );
     }

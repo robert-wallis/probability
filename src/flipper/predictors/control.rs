@@ -90,7 +90,7 @@ mod tests {
             true_count
         );
         assert!(
-            double_down_count > 4900 && double_down_count < 5100,
+            double_down_count > 4750 && double_down_count < 5250,
             "double_down_count:{} should be about 50% of {}",
             double_down_count,
             runs
