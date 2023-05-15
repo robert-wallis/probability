@@ -1,54 +1,98 @@
-use super::{app::app, stats::FinalStats};
+use super::{app_state::AppState, runner::RunnerLoop, stats::FinalStats};
 use std::{error::Error, io};
 
-pub fn multi_csv(
-    total_count: u32,
-    total_app: u32,
-    writer: &mut dyn io::Write,
-) -> Result<(), Box<dyn Error>> {
-    let mut csv_writer = csv::Writer::from_writer(writer);
-    _ = csv_writer.write_record([&"Kind", &"accuracy", &"money"]);
+pub struct Csv<'w> {
+    writer: csv::Writer<&'w mut dyn io::Write>,
+}
 
-    for _ in 0..total_app {
-        let (state, runners) = app(total_count);
-        for runner in runners {
-            let stats = FinalStats::new(&runner.stats, &runner.account, state.total_count);
-            csv_writer.write_record(&[
-                runner.predictor.to_string(),
-                format!("{}", stats.accuracy),
-                format!("{}", stats.money_difference),
-            ])?;
-        }
+impl<'w> Csv<'w> {
+    pub fn new(writer: &'w mut dyn io::Write) -> Self {
+        let mut writer = csv::Writer::from_writer(writer);
+        _ = writer.write_record([&"Kind", &"accuracy", &"money"]);
+        Self { writer }
     }
-    Ok(())
+
+    pub fn print(&mut self, name: &str, final_stats: &FinalStats) -> Result<(), Box<dyn Error>> {
+        self.writer.write_record(&[
+            name.to_string(),
+            format!("{}", final_stats.accuracy),
+            format!("{}", final_stats.money_difference),
+        ])?;
+        Ok(())
+    }
+}
+
+impl RunnerLoop for Csv<'_> {
+    fn each_app(&self, _state: &AppState) {}
+
+    fn each_run(
+        &mut self,
+        name: &str,
+        _state: &AppState,
+        final_stats: &FinalStats,
+    ) -> Result<(), Box<dyn Error>> {
+        self.print(name, final_stats)?;
+        Ok(())
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::multi_csv;
-    use std::io::{BufRead, BufWriter};
+    use super::{AppState, Csv, FinalStats, RunnerLoop};
+    use std::io::BufWriter;
 
     #[test]
-    fn runs_the_app_multiple_times() {
-        // GIVEN multiple ocunts and multiple apps
-        let total_count = 2;
-        let total_app = 3;
+    fn prints_header() {
+        // GIVEN an io writer
         let mut buffer = BufWriter::new(vec![]);
-        // WHEN multi_csv is called
-        let result = multi_csv(total_count, total_app, &mut buffer);
+        // WHEN a new Csv is made
+        _ = Csv::new(&mut buffer);
 
-        // THEN it should run without error
-        assert!(result.is_ok(), "multi_csv should run without error");
-
-        // AND it should write the correct number of lines
-        let number_of_predictors = 4;
-        let total_line_items = total_app * number_of_predictors;
-        let header_length = 1;
-        let total_lines = total_line_items + header_length;
+        // THEN it should write the header
+        let string_of_buffer = bufwriter_to_string(buffer);
         assert_eq!(
-            total_lines,
-            buffer.into_inner().unwrap().lines().count() as u32,
+            "Kind,accuracy,money\n", string_of_buffer,
             "total number of lines in the csv"
         );
+    }
+
+    #[test]
+    fn prints_csv_line() {
+        // GIVEN a Csv object
+        let mut buffer = BufWriter::new(vec![]);
+        let app_state = AppState::new(100);
+
+        // block to show Csv's ownership of buffer
+        {
+            let mut csv = Csv::new(&mut buffer);
+
+            // WHEN Csv::print is called
+            csv.each_app(&app_state);
+            _ = csv.each_run(
+                "name",
+                &app_state,
+                &FinalStats {
+                    money_difference: -20,
+                    expected_money: 100,
+                    accuracy: 0.5,
+                },
+            );
+        }
+
+        // THEN it should print the correct lines
+        let string_of_buffer = bufwriter_to_string(buffer);
+        assert_eq!(
+            "Kind,accuracy,money\nname,0.5,-20\n", string_of_buffer,
+            "total number of lines in the csv"
+        );
+    }
+
+    fn bufwriter_to_string(bufwriter: BufWriter<Vec<u8>>) -> String {
+        String::from_utf8(
+            bufwriter
+                .into_inner()
+                .expect("should be able to get the buffer"),
+        )
+        .expect("should be able to get the string")
     }
 }
