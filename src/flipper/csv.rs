@@ -1,8 +1,4 @@
-use super::{
-    app_state::AppState,
-    runner::{Runner, RunnerLoop},
-    stats::FinalStats,
-};
+use super::{app_state::AppState, runner::RunnerLoop, stats::FinalStats};
 use std::{error::Error, io};
 
 pub struct Csv<'w> {
@@ -16,13 +12,9 @@ impl<'w> Csv<'w> {
         Self { writer }
     }
 
-    pub fn print(
-        &mut self,
-        runner: &Runner,
-        final_stats: &FinalStats,
-    ) -> Result<(), Box<dyn Error>> {
+    pub fn print(&mut self, name: &str, final_stats: &FinalStats) -> Result<(), Box<dyn Error>> {
         self.writer.write_record(&[
-            runner.predictor.to_string(),
+            name.to_string(),
             format!("{}", final_stats.accuracy),
             format!("{}", final_stats.money_difference),
         ])?;
@@ -35,11 +27,11 @@ impl RunnerLoop for Csv<'_> {
 
     fn each_run(
         &mut self,
+        name: &str,
         _state: &AppState,
-        runner: &Runner,
         final_stats: &FinalStats,
     ) -> Result<(), Box<dyn Error>> {
-        self.print(runner, final_stats)?;
+        self.print(name, final_stats)?;
         Ok(())
     }
 }

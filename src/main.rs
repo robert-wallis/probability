@@ -61,7 +61,7 @@ fn main() {
         for runner in runners {
             let final_stats = FinalStats::new(&runner.stats, &runner.account, state.total_count);
 
-            if let Err(e) = command.each_run(&state, &runner, &final_stats) {
+            if let Err(e) = command.each_run(&runner.predictor.to_string(), &state, &final_stats) {
                 println!("Error: {}", e);
                 process::exit(1);
             }
