@@ -38,28 +38,61 @@ impl RunnerLoop for Csv<'_> {
 
 #[cfg(test)]
 mod tests {
-    use super::Csv;
+    use super::{AppState, Csv, FinalStats, RunnerLoop};
     use std::io::BufWriter;
 
     #[test]
-    fn runs_the_app_multiple_times() {
-        // GIVEN multiple ocunts and multiple apps
+    fn prints_header() {
+        // GIVEN an io writer
         let mut buffer = BufWriter::new(vec![]);
-        // WHEN csv is called
+        // WHEN a new Csv is made
         _ = Csv::new(&mut buffer);
 
-        // get the string from the BufWriter
-        let string_of_buffer = String::from_utf8(
-            buffer
-                .into_inner()
-                .expect("should be able to get the buffer"),
-        )
-        .expect("should be able to get the string");
-
         // THEN it should write the header
+        let string_of_buffer = bufwriter_to_string(buffer);
         assert_eq!(
             "Kind,accuracy,money\n", string_of_buffer,
             "total number of lines in the csv"
         );
+    }
+
+    #[test]
+    fn prints_csv_line() {
+        // GIVEN a Csv object
+        let mut buffer = BufWriter::new(vec![]);
+        let app_state = AppState::new(100);
+
+        // block to show Csv's ownership of buffer
+        {
+            let mut csv = Csv::new(&mut buffer);
+
+            // WHEN Csv::print is called
+            csv.each_app(&app_state);
+            _ = csv.each_run(
+                "name",
+                &app_state,
+                &FinalStats {
+                    money_difference: -20,
+                    expected_money: 100,
+                    accuracy: 0.5,
+                },
+            );
+        }
+
+        // THEN it should print the correct lines
+        let string_of_buffer = bufwriter_to_string(buffer);
+        assert_eq!(
+            "Kind,accuracy,money\nname,0.5,-20\n", string_of_buffer,
+            "total number of lines in the csv"
+        );
+    }
+
+    fn bufwriter_to_string(bufwriter: BufWriter<Vec<u8>>) -> String {
+        String::from_utf8(
+            bufwriter
+                .into_inner()
+                .expect("should be able to get the buffer"),
+        )
+        .expect("should be able to get the string")
     }
 }
