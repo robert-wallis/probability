@@ -45,7 +45,7 @@ mod tests {
     use super::{AppState, Better, Prediction, Predictor};
 
     #[test]
-    fn flipper_chooses_the_opposite() {
+    fn chooses_the_opposite_of_last_time() {
         // GIVEN the flipper predictor
         let mut p = Prediction::new();
         let app_state = AppState::new(0);
@@ -59,7 +59,7 @@ mod tests {
     }
 
     #[test]
-    fn flipper_bets_double_down_every_other_time() {
+    fn bets_double_down_every_other_time() {
         // GIVEN the flipper predictor
         let mut p = Prediction::new();
         let mut app_state = AppState::new(0);
