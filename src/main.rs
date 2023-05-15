@@ -49,7 +49,7 @@ fn main() {
         Commands::Stdout { count, apps } => {
             total_count = count;
             total_apps = apps;
-            let io = flipper::io::IO;
+            let io = flipper::io::IO::new(&mut stdout);
             Box::new(io)
         }
     };
@@ -57,7 +57,6 @@ fn main() {
     for _ in 0..total_apps {
         let (state, runners) = flipper::app(total_count);
 
-        command.each_app(&state);
         for runner in runners {
             let final_stats = FinalStats::new(&runner.stats, &runner.account, state.total_count);
 

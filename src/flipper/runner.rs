@@ -22,7 +22,6 @@ macro_rules! runner {
 }
 
 pub trait RunnerLoop {
-    fn each_app(&self, state: &AppState);
     fn each_run(
         &mut self,
         name: &str,
