@@ -17,7 +17,7 @@ pub struct Prediction {
 impl Prediction {
     pub fn new() -> Prediction {
         Prediction {
-            rng: rand::thread_rng(),
+            rng: rand::rng(),
             guess: false,
         }
     }
@@ -26,7 +26,7 @@ impl Prediction {
 /// guess randomly by flipping another coin (rng)
 impl Predictor for Prediction {
     fn predict(&mut self, _: &AppState) -> bool {
-        self.guess = self.rng.gen_bool(0.5);
+        self.guess = self.rng.random_bool(0.5);
         self.guess
     }
 }
@@ -34,7 +34,7 @@ impl Predictor for Prediction {
 /// doubles the bet 50% of the time, because it's a 50% probabiliy that it's the same as last time
 impl Better for Prediction {
     fn bet(&mut self, _state: &AppState) -> Option<Bet> {
-        let double_down = self.rng.gen_bool(0.5);
+        let double_down = self.rng.random_bool(0.5);
         Some(Bet {
             wager: if double_down { 2 } else { 1 },
             on: self.guess,
