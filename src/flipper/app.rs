@@ -10,7 +10,7 @@ use super::{
 };
 
 pub fn app(total_count: u32) -> (AppState, Vec<Runner>) {
-    let mut rng: ThreadRng = thread_rng();
+    let mut rng: ThreadRng = rand::rng();
     let mut state = AppState::new(total_count);
 
     let mut runners: Vec<Runner> = vec![
@@ -21,7 +21,7 @@ pub fn app(total_count: u32) -> (AppState, Vec<Runner>) {
     ];
 
     for _ in 0..state.total_count {
-        let throw: bool = rng.gen_bool(0.5);
+        let throw: bool = rng.random_bool(0.5);
 
         for runner in &mut runners {
             let prediction = runner.predictor.predict(&state);
